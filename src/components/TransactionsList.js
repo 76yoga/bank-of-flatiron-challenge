@@ -1,33 +1,19 @@
 import React from "react";
 import Transaction from "./Transaction";
 
-function TransactionsList({arrayOfAllTransactions, transactionsSetter, searchTerm}) {
-  let transactionList = "Loading...";
+function TransactionsList({ transactions, search }) {
 
-  if(arrayOfAllTransactions){
-    const filteredTransactions = arrayOfAllTransactions.filter(transaction=> {
-      return (transaction.description.toLowerCase().includes(searchTerm.toLowerCase()))
-    })
-    transactionList = filteredTransactions.map((transaction) => (
-    <Transaction 
-    key={transaction.id}
-    date={transaction.date}
-    description={transaction.description}
-    category={transaction.category}
-    amount={transaction.amount}
-    />
-    ))
-  }
-  // const oneTransaction = arrayOfAllTransactions.map((transaction)=> (
-  //   <Transaction 
-  //   key={transaction.id}
-  //   date={transaction.date}
-  //   description={transaction.description}
-  //   category={transaction.category}
-  //   amount={transaction.amount}
-  //   />
-  // ));
-  // s
+
+  const filteredTransactions = transactions.filter(transDescription => {
+    if(search === '') return true
+    return transDescription.description.includes(search)
+  })
+
+  const mapTransaction = filteredTransactions.map(transaction => {
+    return <Transaction key={transaction.id} date={transaction.date} amount={transaction.amount} 
+    description={transaction.description} category={transaction.category} />
+  })
+
   return (
     <table className="ui celled striped padded table">
       <tbody>
@@ -45,10 +31,11 @@ function TransactionsList({arrayOfAllTransactions, transactionsSetter, searchTer
             <h3 className="ui center aligned header">Amount</h3>
           </th>
         </tr>
-        {transactionList}
+        { mapTransaction }
       </tbody>
     </table>
   );
 }
 
 export default TransactionsList;
+  
